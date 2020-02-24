@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+# encoding:utf8
+
+"""Uses dmenu to display the current time in a set of configured timezones.
+
+Add timezones to be displayed to the following configuration file:
+~/.config/tz_dmenu/config.ini
+
+The file should contain a 'timezones' section and each entry should be a pair
+consisting of the friendly name of the timezone and the actual timezone name.
+The following is an example:
+
+```
+[timezones]
+Tokyo = Asia/Tokyo
+```
+
+This program requires pytz.
+
+"""
+
+import configparser
+import locale
+import os
+from datetime import datetime
+from os.path import expanduser
+from subprocess import Popen, PIPE
+
+import pytz
+
+
+ENV = os.environ.copy()
+ENV['LC_ALL'] = 'C'
+ENC = locale.getpreferredencoding()
+
+
+def read_config():
+    """Read a list of timezones from the config file.
+
+    :return: A dictionary of timezones.
+    """
+    config = configparser.ConfigParser()
+    config.read(expanduser("~/.config/tz_dmenu/config.ini"))
+
+    if not config.has_section('timezones'):
+        return {}
+
+    tzs = config.items('timezones')
+
+    return dict(tzs) if tzs else {}
+
+
+def get_timezones():
+    """Retrieve the list of timezones to display and determine the current time
+    in each zone.
+
+    :return: A dictionary of timezones and a list of the timezone names ordered
+     by time.
+    """
+    now = datetime.now()
+
+    tzs = {
+        name: {'code': code, 'time': now.astimezone(pytz.timezone(code))}
+        for name, code in read_config().items()
+    }
+
+    sorted_tzs = sorted(
+        tzs,
+        reverse=True,
+        key=lambda x: tzs[x]['time'].replace(tzinfo=None)
+    )
+
+    return tzs, sorted_tzs
+
+
+def build_titles(tzs, sorted_tzs):
+    """Builds the titles to be displayed in dmenu.
+
+    :param tzs: A dictionary of timezones.
+    :param sorted_tzs: A list of the names of the timezones, sorted by time.
+    :return: A string consisting of the titles to be displayed in dmenu.
+    """
+    titles = []
+    max_name = len(sorted(sorted_tzs, reverse=True, key=lambda x: len(x))[0])
+
+    for name in sorted_tzs:
+        tz = tzs[name]
+        name_padding = max_name - len(name) + 2
+
+        titles.append(
+            f"{name.title()}"
+            f"{' ' * name_padding}"
+            f"{tz['time'].strftime('%I:%M %p %z')}"
+        )
+
+    return "\n".join(t for t in titles).encode(ENC)
+
+
+def run():
+    """Main function that builds a list of timezones and displays them via dmenu."""
+    tzs, sorted_tzs = get_timezones()
+
+    if tzs:
+        titles = build_titles(tzs, sorted_tzs)
+    else:
+        titles = "Add time zones to ~/.config/tz_dmenu/config.ini".encode(ENC)
+
+    cmd = ["dmenu", "-i", "-l", str(len(titles)), "-p", str(">")]
+
+    Popen(
+        cmd,
+        stdin=PIPE,
+        stdout=PIPE,
+        env=ENV
+    ).communicate(input=titles)
+
+
+if __name__ == '__main__':
+    run()
