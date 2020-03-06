@@ -1,5 +1,5 @@
 # tz-dmenu
-Display the current time in various time zones via dmenu.
+tz-dmenu is a program that displays the current time in various time zones via dmenu.
 
 Three versions of this program exist.
 1. Python: this was the first version and Python was chosen due to my familiarity with the language and the need for this utility.
