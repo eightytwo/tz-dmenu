@@ -1,12 +1,14 @@
 # tz-dmenu
 tz-dmenu is a program that displays the current time in various time zones via dmenu.
 
+![Screenshot of tz-dmenu](screenshot.png "Screenshot of tz-dmenu")
+
 Three versions of this program exist.
-1. Python: this was the first version and Python was chosen due to my familiarity with the language and the need for this utility.
+1. [Python](python/): this was the first version and Python was chosen due to my familiarity with the language.
 
-2. Rust: I decided to try and write this in Rust as a learning exercise. This version is missing nice error handling which would be good to add as I learn more.
+2. [Rust](rust/): I decided to try and write this in Rust as a learning exercise. This version is missing nice error handling which would be good to add as I learn more.
 
-3. Racket: I have been playing with Racket in recent times and want to write as much Racket as possible. This small program was a good opportunity to do this.
+3. [Racket](racket/): I've been playing with Racket in recent times and am always looking for an excuse to write more Racket code. This small program was a good opportunity to do this.
 
 ## Requirements
 
