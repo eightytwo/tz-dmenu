@@ -1,5 +1,5 @@
 # tz-dmenu
-tz-dmenu is a program that displays the current time in various time zones via dmenu.
+tz-dmenu is a program that displays the current time in various time zones via [dmenu](https://tools.suckless.org/dmenu/).
 
 ![Screenshot of tz-dmenu](screenshot.png "Screenshot of tz-dmenu")
 
