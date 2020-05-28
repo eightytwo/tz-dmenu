@@ -15,15 +15,14 @@
 
 (defn read-config
   "Read the contents of the tz_dmenu config file."
-  []
-  (let [path (get-config-path)]
-    (try
-      (edn/read-string (slurp path))
-      (catch java.io.FileNotFoundException _
-        (prn
-         (str "Unable to read the config file, "
-              "please ensure it exists at" path))
-        (System/exit 1)))))
+  [config-path]
+  (try
+    (edn/read-string (slurp config-path))
+    (catch java.io.FileNotFoundException _
+      (prn
+        (str "Unable to read the config file, "
+             "please ensure it exists at" config-path))
+      (System/exit 1))))
 
 (defn calculate-current-time
   "Get the current time in the time zone described by `tz-map`.
@@ -55,9 +54,7 @@
     (map #(build-title % max-length) timezones)))
 
 (defn sort-timezones
-  "Sort the time zones in the collection `timezones` in descending order.
-  TODO: It should be possible to use `(sort-by after? timezones)` however
-  time zones with an offset of zero don't seem to sort correctly."
+  "Sort the time zones in the collection `timezones` in descending order."
   [timezones]
   (reverse
    (sort-by #(t/format (t/formatter :iso-offset-date-time) (:time %))
@@ -66,7 +63,8 @@
 (defn get-timezones
   "Get the time zones to be displayed."
   []
-  (->> (read-config)
+  (->> (get-config-path)
+       (read-config)
        (map calculate-current-time)
        (sort-timezones)
        (build-titles)))
