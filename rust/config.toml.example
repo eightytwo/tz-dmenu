@@ -1,2 +1,2 @@
 [timezones]
-Tokyo = Asia/Tokyo
+Tokyo = "Asia/Tokyo"
