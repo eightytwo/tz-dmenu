@@ -1,0 +1,19 @@
+{:paths ["src"]
+ :deps {clj.native-image {:git/url "https://github.com/taylorwood/clj.native-image.git"
+                          :sha "7708e7fd4572459c81f6a6b8e44c96f41cdd92d4"}
+        me.raynes/conch {:mvn/version "0.8.0"}
+        org.clojure/clojure {:mvn/version "1.10.1"}
+        tick {:mvn/version "0.4.23-alpha"}}
+ :aliases
+ {:uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.0.94"}}
+            :main-opts ["-m" "hf.depstar.uberjar" "core.jar"
+                        "-C" "-m" "tz-dmenu.core"]}
+  :native-image
+  {:main-opts ["-m clj.native-image tz-dmenu.core"
+               "--initialize-at-build-time"
+               "--no-fallback"
+               "--report-unsupported-elements-at-runtime"
+               "-H:+ReportExceptionStackTraces"
+               "-H:Name=tz_dmenu"
+               "-H:ReflectionConfigurationFiles=graal_reflection.json"]
+   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}}

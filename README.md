@@ -10,7 +10,9 @@ Three versions of this program exist.
 
 3. [Racket](racket/): I've been playing with Racket in recent times and am always looking for an excuse to write more Racket code. This small program was a good opportunity to do this.
 
-## Requirements
+4. [Clojure](clojure/): Similar to Racket, Clojure has piqued my interest and this small program is not too ambitious to write in a new language.
+
+## Components
 
 ### Python
 - Python 3.6
@@ -28,6 +30,11 @@ Three versions of this program exist.
 - Racket 7.6
 - gregor : date and time library
 - shell/pipeline : library for basic unix-style pipelines
+
+### Clojure
+- Clojure 1.10.1
+- tick : date and time library
+- me.raynes/conch : library for executing and communicating with child processes
 
 ## Usage
 
@@ -68,6 +75,24 @@ $ raco exe tz_dmenu.rkt
 ```
 
 3. Copy the program `racket/tz_dmenu to a location on your `PATH` and execute it or bind it to a keystroke combination.
+
+### Clojure
+1. Create the config file `~/.config/tz_dmenu/config.edn` and populate it with the time zones you want to view. Here is an example:
+```clojure
+[{:name "Tokyo" :tz "Asia/Tokyo"}]
+```
+
+2. Run the program via `clj`.
+```bash
+$ clj -m tz-dmenu.core
+```
+
+I intended on creating a pre-built binary with GraalVM however I ran into issues with the date libraries that I tried using. Writing some Java interop might solve this problem however I will wait to see if either of these issues are fixed.
+1. [`clojure.java-time`](https://github.com/dm3/clojure.java-time)
+    > java_time.graph.Types cannot be cast to java.lang.Comparable
+
+2. [`tick`](https://github.com/juxt/tick)
+    > Exception in thread "main" java.lang.IllegalArgumentException: No matching method withZoneSameInstant found taking 1 args for class java.time.ZonedDateTime
 
 ## Credits
 Inspired by [networkmanager-dmenu](https://github.com/firecat53/networkmanager-dmenu)

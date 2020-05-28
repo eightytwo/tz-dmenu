@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  graalvm-builder:
+    image: clj-native-graalvm-builder:1.0
+    build:
+      context: .
+      network: host
+    command: ["clojure", "-A:native-image"]
+    volumes:
+    - .:/build:z
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"

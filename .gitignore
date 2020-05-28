@@ -1,2 +1,14 @@
+# Python
 python/env
+
+# Rust
 rust/target
+
+# Clojure
+.cpcache
+.nrepl-history
+.nrepl-port
+classes
+target
+*.class
+*.jar
