@@ -52,7 +52,7 @@
 ;; and the local time in that zone.
 (define tz-strings
   (for/list ([tz sorted-tzs])
-    (string-append (pad-location (car tz)) (~t (cdr tz) "hh:mm a"))))
+    (string-append (pad-location (car tz)) (~t (cdr tz) "hh:mm a Z"))))
 
 ;; Run dmenu in a subprocess with its input port as a pipe
 (define pipeline
